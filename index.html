@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>翰林 115 國二上數學全冊 | 1-1～4-3 AI 互動練習本</title>
+    <title>115 翰林國二上（第3冊）數學全冊 | 1-1～4-3 AI 互動練習本</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -53,7 +53,7 @@
             display: flex;
             flex-wrap: nowrap;
             align-items: center;
-            gap: 0.45rem;
+            gap: 0.5rem;
             overflow-x: auto;
             overflow-y: hidden;
             -webkit-overflow-scrolling: touch;
@@ -75,91 +75,126 @@
             background: rgba(56, 189, 248, 0.35);
             border-radius: 9999px;
         }
+
+        /* 手機與桌機一致的最小 44px 觸控目標輔助 */
+        .touch-target-min {
+            min-height: 44px;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans antialiased selection:bg-sky-400 selection:text-slate-950">
 
-    <!-- 頂部導覽與全冊 1-1~4-3 章節篩選 -->
+    <!-- 頂部導覽：清楚標示「115 翰林國二上（第3冊）」並獨立拆出「章節切換列」與「1-1~4-3 單元選擇列」 -->
     <header class="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-md border-b border-slate-800">
-        <div class="max-w-4xl mx-auto px-3 sm:px-6 py-2.5">
-            <!-- 標題列 -->
-            <div class="flex items-center justify-between mb-2">
-                <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 text-xs font-bold bg-sky-500 text-slate-950 rounded-md tracking-wider">翰林 115</span>
-                    <h1 class="text-sm sm:text-lg font-bold text-white tracking-tight">國二上數學全冊 <span class="text-sky-400 font-semibold text-xs sm:text-sm">1-1～4-3</span></h1>
+        <div class="max-w-4xl mx-auto px-3 sm:px-6 py-2.5 space-y-2.5">
+            <!-- 標題與冊別資訊列 -->
+            <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                    <span class="px-2.5 py-1 text-xs font-bold bg-sky-500 text-slate-950 rounded-lg tracking-wider shrink-0">115 翰林</span>
+                    <div class="truncate">
+                        <h1 class="text-sm sm:text-lg font-bold text-white tracking-tight truncate">
+                            國二上數學全冊 <span class="text-sky-400 font-semibold text-xs sm:text-sm">（第3冊 · 1-1～4-3）</span>
+                        </h1>
+                    </div>
                 </div>
-                <div class="flex items-center gap-2 text-xs">
-                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-800 text-emerald-400 font-semibold border border-emerald-500/20">
-                        <i class="fa-solid fa-fire"></i> 連對 <span id="streak-count">0</span> 題
+                <div class="flex items-center gap-2 text-xs shrink-0">
+                    <span class="inline-flex items-center gap-1 px-2.5 min-h-[44px] rounded-xl bg-slate-800 text-emerald-400 font-semibold border border-emerald-500/20">
+                        <i class="fa-solid fa-fire"></i> 連對 <span id="streak-count">0</span>
                     </span>
-                    <button type="button" onclick="toggleSummaryModal()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center gap-1.5 border border-slate-700 active:scale-95">
+                    <button type="button" onclick="toggleSummaryModal()" class="px-3 min-h-[44px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center gap-1.5 border border-slate-700 active:scale-95">
                         <i class="fa-solid fa-book-open text-sky-400"></i>
                         <span>重點速查</span>
                     </button>
                 </div>
             </div>
 
-            <!-- 第一層：章節群組篩選 -->
-            <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1.5" id="chapter-tabs">
-                <button type="button" data-ch="all" onclick="selectChapter('all')" class="ch-btn px-3 py-1 rounded-lg text-xs font-bold whitespace-nowrap transition bg-sky-500 text-slate-950 shadow-sm">
-                    全冊綜合 (1-1~4-3)
-                </button>
-                <button type="button" data-ch="1" onclick="selectChapter('1')" class="ch-btn px-3 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition bg-slate-800 text-slate-300 hover:bg-slate-700">
-                    第1章 乘法公式與多項式
-                </button>
-                <button type="button" data-ch="2" onclick="selectChapter('2')" class="ch-btn px-3 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition bg-slate-800 text-slate-300 hover:bg-slate-700">
-            <!-- 第二層：細分單元橫向可捲動藥丸列 (完整包含 1-1 至 4-3，支援手指滑動、滑鼠拖曳與左右箭頭) -->
-            <div class="pt-1.5 border-t border-slate-800/80 flex items-center gap-1">
-                <button type="button" onclick="scrollUnitTrack(-220)" aria-label="向左捲動單元列" class="w-7 h-7 rounded-full bg-slate-800/90 hover:bg-slate-700 text-slate-300 hover:text-sky-300 border border-slate-700/80 flex items-center justify-center shrink-0 transition active:scale-95">
-                    <i class="fa-solid fa-chevron-left text-[11px]"></i>
-                </button>
+            <!-- 區塊 A（完全獨立）：第1章～第4章 章節切換列（僅切換章節範圍，不與單元藥丸混雜） -->
+            <div class="bg-slate-950/75 border border-slate-800/90 rounded-xl p-1.5">
+                <div class="flex items-center justify-between px-1.5 pb-1">
+                    <span class="text-[11px] font-bold tracking-wider text-slate-400">
+                        <i class="fa-solid fa-layer-group text-sky-400 mr-1"></i>第3冊 章節切換
+                    </span>
+                    <span id="active-chapter-label" class="text-[11px] text-sky-300 font-medium">目前：第3冊全冊（第1～4章）</span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5" id="chapter-tabs" role="tablist" aria-label="章節切換">
+                    <button type="button" data-ch="all" onclick="selectChapter('all')" class="ch-btn touch-target-min px-2.5 py-2 rounded-lg text-xs font-bold transition bg-sky-500 text-slate-950 shadow-sm flex items-center justify-center">
+                        全冊 (第1~4章)
+                    </button>
+                    <button type="button" data-ch="1" onclick="selectChapter('1')" class="ch-btn touch-target-min px-2.5 py-2 rounded-lg text-xs font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center justify-center">
+                        第1章 多項式與公式
+                    </button>
+                    <button type="button" data-ch="2" onclick="selectChapter('2')" class="ch-btn touch-target-min px-2.5 py-2 rounded-lg text-xs font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center justify-center">
+                        第2章 方根與畢氏
+                    </button>
+                    <button type="button" data-ch="3" onclick="selectChapter('3')" class="ch-btn touch-target-min px-2.5 py-2 rounded-lg text-xs font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center justify-center">
+                        第3章 因式分解
+                    </button>
+                    <button type="button" data-ch="4" onclick="selectChapter('4')" class="ch-btn touch-target-min col-span-2 sm:col-span-1 px-2.5 py-2 rounded-lg text-xs font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center justify-center">
+                        第4章 一元二次方程式
+                    </button>
+                </div>
+            </div>
 
-                <nav id="unit-tabs" aria-label="1-1 至 4-3 單元選擇列" class="unit-scroll-track flex-1 min-w-0 py-0.5 px-0.5 select-none">
-                    <button type="button" data-unit="all" data-ch="all" onclick="selectUnit('all')" class="unit-btn shrink-0 px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition bg-sky-500/20 text-sky-300 border border-sky-500/40">
-                        全部 11 單元
+            <!-- 區塊 B（完全獨立）：1-1～4-3 細分單元橫向滑動選擇列 -->
+            <div class="bg-slate-950/75 border border-slate-800/90 rounded-xl p-1.5">
+                <div class="flex items-center justify-between px-1.5 pb-1">
+                    <span class="text-[11px] font-bold tracking-wider text-slate-400">
+                        <i class="fa-solid fa-list-ol text-amber-400 mr-1"></i>單元選擇（左右滑動或點選 1-1 ～ 4-3）
+                    </span>
+                    <span id="active-unit-label" class="text-[11px] text-amber-300 font-medium">全部 11 單元</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button type="button" onclick="scrollUnitTrack(-220)" aria-label="向左捲動單元列" class="w-11 h-11 rounded-xl bg-slate-800/95 hover:bg-slate-700 text-slate-300 hover:text-sky-300 border border-slate-700/80 flex items-center justify-center shrink-0 transition active:scale-95">
+                        <i class="fa-solid fa-chevron-left text-xs"></i>
                     </button>
-                    <!-- 第1章 -->
-                    <button type="button" data-unit="1-1" data-ch="1" onclick="selectUnit('1-1')" class="unit-btn shrink-0 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80">
-                        1-1 乘法公式與多項式
-                    </button>
-                    <button type="button" data-unit="1-2" data-ch="1" onclick="selectUnit('1-2')" class="unit-btn shrink-0 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80">
-                        1-2 多項式的加減
-                    </button>
-                    <button type="button" data-unit="1-3" data-ch="1" onclick="selectUnit('1-3')" class="unit-btn shrink-0 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80">
-                        1-3 多項式的乘除
-                    </button>
-                    <!-- 第2章 -->
-                    <button type="button" data-unit="2-1" data-ch="2" onclick="selectUnit('2-1')" class="unit-btn shrink-0 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80">
-                        2-1 二次方根的意義
-                    </button>
-                    <button type="button" data-unit="2-2" data-ch="2" onclick="selectUnit('2-2')" class="unit-btn shrink-0 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80">
-                        2-2 根式的運算
-                    </button>
-                    <button type="button" data-unit="2-3" data-ch="2" onclick="selectUnit('2-3')" class="unit-btn shrink-0 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80">
-                        2-3 畢氏定理
-                    </button>
-                    <!-- 第3章 -->
-                    <button type="button" data-unit="3-1" data-ch="3" onclick="selectUnit('3-1')" class="unit-btn shrink-0 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80">
-                        3-1 提公因式與乘法公式作因式分解
-                    </button>
-                    <button type="button" data-unit="3-2" data-ch="3" onclick="selectUnit('3-2')" class="unit-btn shrink-0 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80">
-                        3-2 利用十字交乘法作因式分解
-                    </button>
-                    <!-- 第4章 -->
-                    <button type="button" data-unit="4-1" data-ch="4" onclick="selectUnit('4-1')" class="unit-btn shrink-0 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80">
-                        4-1 因式分解法解一元二次方程式
-                    </button>
-                    <button type="button" data-unit="4-2" data-ch="4" onclick="selectUnit('4-2')" class="unit-btn shrink-0 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80">
-                        4-2 配方法與公式解
-                    </button>
-                    <button type="button" data-unit="4-3" data-ch="4" onclick="selectUnit('4-3')" class="unit-btn shrink-0 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80">
-                        4-3 一元二次方程式的應用問題
-                    </button>
-                </nav>
 
-                <button type="button" onclick="scrollUnitTrack(220)" aria-label="向右捲動單元列" class="w-7 h-7 rounded-full bg-slate-800/90 hover:bg-slate-700 text-slate-300 hover:text-sky-300 border border-slate-700/80 flex items-center justify-center shrink-0 transition active:scale-95">
-                    <i class="fa-solid fa-chevron-right text-[11px]"></i>
-                </button>
+                    <nav id="unit-tabs" aria-label="1-1 至 4-3 單元選擇列" class="unit-scroll-track flex-1 min-w-0 py-0.5 px-0.5 select-none">
+                        <button type="button" data-unit="all" data-ch="all" onclick="selectUnit('all')" class="unit-btn touch-target-min shrink-0 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition bg-sky-500/20 text-sky-300 border border-sky-500/40 flex items-center">
+                            全部單元
+                        </button>
+                        <!-- 第1章（依 1-1 多項式與加減法、1-2 多項式的乘法與除法、1-3 乘法公式） -->
+                        <button type="button" data-unit="1-1" data-ch="1" onclick="selectUnit('1-1')" class="unit-btn touch-target-min shrink-0 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80 flex items-center">
+                            1-1 多項式與加減法
+                        </button>
+                        <button type="button" data-unit="1-2" data-ch="1" onclick="selectUnit('1-2')" class="unit-btn touch-target-min shrink-0 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80 flex items-center">
+                            1-2 多項式的乘法與除法
+                        </button>
+                        <button type="button" data-unit="1-3" data-ch="1" onclick="selectUnit('1-3')" class="unit-btn touch-target-min shrink-0 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80 flex items-center">
+                            1-3 乘法公式
+                        </button>
+                        <!-- 第2章 -->
+                        <button type="button" data-unit="2-1" data-ch="2" onclick="selectUnit('2-1')" class="unit-btn touch-target-min shrink-0 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80 flex items-center">
+                            2-1 二次方根的意義
+                        </button>
+                        <button type="button" data-unit="2-2" data-ch="2" onclick="selectUnit('2-2')" class="unit-btn touch-target-min shrink-0 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80 flex items-center">
+                            2-2 根式的運算
+                        </button>
+                        <button type="button" data-unit="2-3" data-ch="2" onclick="selectUnit('2-3')" class="unit-btn touch-target-min shrink-0 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80 flex items-center">
+                            2-3 畢氏定理
+                        </button>
+                        <!-- 第3章 -->
+                        <button type="button" data-unit="3-1" data-ch="3" onclick="selectUnit('3-1')" class="unit-btn touch-target-min shrink-0 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80 flex items-center">
+                            3-1 提公因式與乘法公式因式分解
+                        </button>
+                        <button type="button" data-unit="3-2" data-ch="3" onclick="selectUnit('3-2')" class="unit-btn touch-target-min shrink-0 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80 flex items-center">
+                            3-2 利用十字交乘法因式分解
+                        </button>
+                        <!-- 第4章 -->
+                        <button type="button" data-unit="4-1" data-ch="4" onclick="selectUnit('4-1')" class="unit-btn touch-target-min shrink-0 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80 flex items-center">
+                            4-1 因式分解法解一元二次方程式
+                        </button>
+                        <button type="button" data-unit="4-2" data-ch="4" onclick="selectUnit('4-2')" class="unit-btn touch-target-min shrink-0 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80 flex items-center">
+                            4-2 配方法與公式解
+                        </button>
+                        <button type="button" data-unit="4-3" data-ch="4" onclick="selectUnit('4-3')" class="unit-btn touch-target-min shrink-0 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80 flex items-center">
+                            4-3 一元二次方程式的應用問題
+                        </button>
+                    </nav>
+
+                    <button type="button" onclick="scrollUnitTrack(220)" aria-label="向右捲動單元列" class="w-11 h-11 rounded-xl bg-slate-800/95 hover:bg-slate-700 text-slate-300 hover:text-sky-300 border border-slate-700/80 flex items-center justify-center shrink-0 transition active:scale-95">
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
@@ -170,26 +205,26 @@
         <!-- 1. 題目顯示卡片 -->
         <section class="bg-slate-800/90 rounded-2xl p-4 sm:p-6 border border-slate-700/80 shadow-xl">
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                <div class="flex items-center gap-2">
-                    <span id="q-unit-tag" class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-sky-500/15 text-sky-300 border border-sky-500/30">
-                        1-1 乘法公式
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span id="q-unit-tag" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-sky-500/15 text-sky-300 border border-sky-500/30">
+                        1-1 多項式與加減法
                     </span>
-                    <span id="q-source-tag" class="px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-900 text-slate-400 border border-slate-700/70">
+                    <span id="q-source-tag" class="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-slate-900 text-slate-400 border border-slate-700/70">
                         即時題庫
                     </span>
                 </div>
 
-                <!-- 出題與 AI 對話控制按鈕 -->
-                <div class="flex items-center gap-1.5 sm:gap-2">
-                    <button type="button" id="btn-toggle-chat" onclick="toggleAIChatPanel()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/35 transition flex items-center gap-1.5 active:scale-95">
+                <!-- 出題與 AI 對話控制按鈕（皆 >= 44px 高度） -->
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button type="button" id="btn-toggle-chat" onclick="toggleAIChatPanel()" class="touch-target-min px-3.5 py-2 rounded-xl text-xs font-semibold bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/35 transition flex items-center gap-1.5 active:scale-95">
                         <i class="fa-solid fa-comments"></i>
                         <span>對話自訂題</span>
                     </button>
-                    <button type="button" id="btn-ai-question" onclick="generateAIQuestion()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-sky-500 hover:bg-sky-400 text-slate-950 shadow-md transition flex items-center gap-1.5 active:scale-95">
+                    <button type="button" id="btn-ai-question" onclick="generateAIQuestion()" class="touch-target-min px-3.5 py-2 rounded-xl text-xs font-semibold bg-sky-500 hover:bg-sky-400 text-slate-950 shadow-md transition flex items-center gap-1.5 active:scale-95">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
                         <span>AI 出題</span>
                     </button>
-                    <button type="button" id="btn-new-question" onclick="generateLocalQuestion()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-700 text-white border border-slate-700 transition flex items-center gap-1.5 active:scale-95">
+                    <button type="button" id="btn-new-question" onclick="generateLocalQuestion()" class="touch-target-min px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-700 text-white border border-slate-700 transition flex items-center gap-1.5 active:scale-95">
                         <i class="fa-solid fa-rotate-right"></i>
                         <span>新題目</span>
                     </button>
@@ -201,7 +236,7 @@
                 <div id="question-text" class="text-lg sm:text-xl font-medium text-slate-100 leading-relaxed tracking-wide whitespace-pre-line"></div>
             </div>
 
-            <!-- 幾何與分割圖形 SVG 容器 -->
+            <!-- 幾何與代數圖形 SVG 容器 -->
             <div id="question-svg-container" class="hidden mt-3 pt-3 border-t border-slate-700/80 flex justify-center"></div>
         </section>
 
@@ -209,16 +244,16 @@
         <section id="ai-chat-panel" class="hidden bg-slate-800 rounded-2xl border border-amber-500/35 shadow-xl overflow-hidden">
             <div class="px-4 py-2.5 bg-slate-900/90 border-b border-slate-700 flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                    <span class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs">
+                    <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs">
                         <i class="fa-solid fa-robot"></i>
                     </span>
                     <h2 class="text-xs sm:text-sm font-bold text-white">AI 出題小幫手 <span class="text-slate-400 font-normal text-xs ml-1">指定單元、難度或應用題型</span></h2>
                 </div>
-                <div class="flex items-center gap-2">
-                    <button type="button" onclick="clearChatHistory()" class="text-xs text-slate-400 hover:text-white px-2 py-1 rounded hover:bg-slate-800 transition">
+                <div class="flex items-center gap-1.5">
+                    <button type="button" onclick="clearChatHistory()" class="touch-target-min px-2.5 text-xs text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition flex items-center">
                         <i class="fa-solid fa-broom mr-1"></i>清除
                     </button>
-                    <button type="button" onclick="toggleAIChatPanel()" class="text-slate-400 hover:text-white p-1 transition">
+                    <button type="button" onclick="toggleAIChatPanel()" aria-label="收合對話面板" class="touch-target-min px-3 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition flex items-center">
                         <i class="fa-solid fa-chevron-up"></i>
                     </button>
                 </div>
@@ -231,26 +266,26 @@
                         <i class="fa-solid fa-graduation-cap"></i>
                     </div>
                     <div class="bg-slate-800 text-slate-200 rounded-2xl rounded-tl-sm px-3.5 py-2.5 border border-slate-700 leading-relaxed text-xs sm:text-sm">
-                        輸入想練習的單元或題型（例如：「出 4-3 矩形道路應用題」、「考 1-3 多項式除法求餘式」或「出簡單一點的 4-2 配方法」），新題目會自動同步至上方作答區！
+                        輸入想練習的單元或題型（例如：「出 4-3 矩形道路應用題」、「考 1-2 多項式除法求餘式」或「出簡單一點的 4-2 配方法」），新題目會自動同步至上方作答區！
                     </div>
                 </div>
             </div>
 
             <!-- 快速提示晶片列 -->
-            <div class="px-3.5 py-2 bg-slate-900 border-t border-slate-800 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-                <button type="button" onclick="sendQuickPrompt('針對目前題目出類題')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-amber-500/20 text-amber-300 border border-amber-500/25 text-xs whitespace-nowrap transition">
+            <div class="px-3.5 py-2 bg-slate-900 border-t border-slate-800 flex items-center gap-2 overflow-x-auto no-scrollbar">
+                <button type="button" onclick="sendQuickPrompt('針對目前題目出類題')" class="touch-target-min px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-amber-500/20 text-amber-300 border border-amber-500/25 text-xs whitespace-nowrap transition flex items-center">
                     針對目前題目出類題
                 </button>
-                <button type="button" onclick="sendQuickPrompt('出 4-3 矩形道路應用題')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-sky-500/20 text-sky-300 border border-sky-500/25 text-xs whitespace-nowrap transition">
+                <button type="button" onclick="sendQuickPrompt('出 4-3 矩形道路應用題')" class="touch-target-min px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-sky-500/20 text-sky-300 border border-sky-500/25 text-xs whitespace-nowrap transition flex items-center">
                     出 4-3 矩形道路應用題
                 </button>
-                <button type="button" onclick="sendQuickPrompt('考 1-3 多項式除法求餘式')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-sky-500/20 text-slate-200 border border-slate-700 text-xs whitespace-nowrap transition">
-                    考 1-3 多項式除法求餘式
+                <button type="button" onclick="sendQuickPrompt('考 1-2 多項式除法求餘式')" class="touch-target-min px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-sky-500/20 text-slate-200 border border-slate-700 text-xs whitespace-nowrap transition flex items-center">
+                    考 1-2 多項式除法求餘式
                 </button>
-                <button type="button" onclick="sendQuickPrompt('出簡單一點的 4-2 配方法')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/25 text-xs whitespace-nowrap transition">
+                <button type="button" onclick="sendQuickPrompt('出簡單一點的 4-2 配方法')" class="touch-target-min px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/25 text-xs whitespace-nowrap transition flex items-center">
                     出簡單一點的 4-2 配方法
                 </button>
-                <button type="button" onclick="sendQuickPrompt('給我解題提示')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-violet-500/20 text-violet-300 border border-violet-500/25 text-xs whitespace-nowrap transition">
+                <button type="button" onclick="sendQuickPrompt('給我解題提示')" class="touch-target-min px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-violet-500/20 text-violet-300 border border-violet-500/25 text-xs whitespace-nowrap transition flex items-center">
                     給我解題提示
                 </button>
             </div>
@@ -258,9 +293,9 @@
             <!-- 輸入框 -->
             <div class="p-3 bg-slate-900 border-t border-slate-800 flex items-center gap-2">
                 <input type="text" id="chat-input" placeholder="輸入題型需求或詢問觀念..." 
-                    class="flex-1 bg-slate-950 border border-slate-700 focus:border-amber-500 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 outline-none transition"
+                    class="flex-1 min-h-[44px] bg-slate-950 border border-slate-700 focus:border-amber-500 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 outline-none transition"
                     autocomplete="off">
-                <button type="button" id="btn-send-chat" onclick="sendChatMessage()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition flex items-center gap-1.5 active:scale-95 shrink-0">
+                <button type="button" id="btn-send-chat" onclick="sendChatMessage()" class="touch-target-min px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition flex items-center gap-1.5 active:scale-95 shrink-0">
                     <span>傳送</span>
                     <i class="fa-solid fa-paper-plane text-xs"></i>
                 </button>
@@ -272,43 +307,51 @@
             <!-- 畫布工具列 -->
             <div class="px-3 py-2.5 bg-slate-900/90 border-b border-slate-700 flex flex-wrap items-center justify-between gap-2">
                 <div class="flex items-center gap-2">
-                    <span class="text-xs font-semibold text-slate-400 hidden sm:inline"><i class="fa-solid fa-pen-nib mr-1 text-sky-400"></i>計算紙</span>
-                    <!-- 白 / 藍 / 紅 / 綠 四色畫筆 -->
-                    <button type="button" onclick="setPenColor('#ffffff')" data-color="#ffffff" class="color-btn w-6 h-6 rounded-full bg-white ring-2 ring-offset-2 ring-offset-slate-900 ring-sky-400 transition" title="白色畫筆"></button>
-                    <button type="button" onclick="setPenColor('#38bdf8')" data-color="#38bdf8" class="color-btn w-6 h-6 rounded-full bg-sky-400 opacity-75 hover:opacity-100 transition" title="天空藍畫筆"></button>
-                    <button type="button" onclick="setPenColor('#f87171')" data-color="#f87171" class="color-btn w-6 h-6 rounded-full bg-red-400 opacity-75 hover:opacity-100 transition" title="紅色畫筆"></button>
-                    <button type="button" onclick="setPenColor('#4ade80')" data-color="#4ade80" class="color-btn w-6 h-6 rounded-full bg-green-400 opacity-75 hover:opacity-100 transition" title="綠色畫筆"></button>
+                    <span class="text-xs font-semibold text-slate-400 hidden sm:inline mr-1"><i class="fa-solid fa-pen-nib mr-1 text-sky-400"></i>計算紙</span>
+                    <!-- 白 / 藍 / 紅 / 綠 四色畫筆（觸控區 >= 44px） -->
+                    <button type="button" onclick="setPenColor('#ffffff')" data-color="#ffffff" aria-label="白色畫筆" class="color-btn touch-target-min w-11 h-11 rounded-xl flex items-center justify-center transition">
+                        <span class="w-6 h-6 rounded-full bg-white ring-2 ring-offset-2 ring-offset-slate-900 ring-sky-400 block"></span>
+                    </button>
+                    <button type="button" onclick="setPenColor('#38bdf8')" data-color="#38bdf8" aria-label="天空藍畫筆" class="color-btn touch-target-min w-11 h-11 rounded-xl flex items-center justify-center transition">
+                        <span class="w-6 h-6 rounded-full bg-sky-400 opacity-75 hover:opacity-100 block"></span>
+                    </button>
+                    <button type="button" onclick="setPenColor('#f87171')" data-color="#f87171" aria-label="紅色畫筆" class="color-btn touch-target-min w-11 h-11 rounded-xl flex items-center justify-center transition">
+                        <span class="w-6 h-6 rounded-full bg-red-400 opacity-75 hover:opacity-100 block"></span>
+                    </button>
+                    <button type="button" onclick="setPenColor('#4ade80')" data-color="#4ade80" aria-label="綠色畫筆" class="color-btn touch-target-min w-11 h-11 rounded-xl flex items-center justify-center transition">
+                        <span class="w-6 h-6 rounded-full bg-green-400 opacity-75 hover:opacity-100 block"></span>
+                    </button>
                 </div>
 
-                <!-- 畫布控制功能 -->
-                <div class="flex items-center gap-1.5">
-                    <button type="button" onclick="toggleGrid()" id="btn-grid" class="px-2.5 py-1.5 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 transition flex items-center gap-1" title="切換背景格線">
+                <!-- 畫布控制功能（皆 >= 44px 高度） -->
+                <div class="flex items-center gap-1.5 flex-wrap">
+                    <button type="button" onclick="toggleGrid()" id="btn-grid" class="touch-target-min px-3 py-2 rounded-xl text-xs bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 transition flex items-center gap-1" title="切換背景格線">
                         <i class="fa-solid fa-border-all"></i>
                         <span class="hidden sm:inline">格線</span>
                     </button>
-                    <button type="button" onclick="toggleCanvasHeight()" id="btn-canvas-size" class="px-2.5 py-1.5 rounded-lg text-xs bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/35 transition flex items-center gap-1 font-medium" title="無損切換計算紙高度">
+                    <button type="button" onclick="toggleCanvasHeight()" id="btn-canvas-size" class="touch-target-min px-3 py-2 rounded-xl text-xs bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/35 transition flex items-center gap-1 font-medium" title="無損切換計算紙高度">
                         <i class="fa-solid fa-up-down"></i>
                         <span id="canvas-size-label">超大</span>
                     </button>
-                    <button type="button" onclick="toggleEraser()" id="btn-eraser" class="px-2.5 py-1.5 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1" title="橡皮擦">
+                    <button type="button" onclick="toggleEraser()" id="btn-eraser" class="touch-target-min px-3 py-2 rounded-xl text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1" title="橡皮擦">
                         <i class="fa-solid fa-eraser"></i>
                         <span class="hidden sm:inline">橡皮擦</span>
                     </button>
-                    <button type="button" onclick="undoCanvas()" class="px-2.5 py-1.5 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1" title="復原上一步">
+                    <button type="button" onclick="undoCanvas()" class="touch-target-min px-3 py-2 rounded-xl text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1" title="復原上一步">
                         <i class="fa-solid fa-rotate-left"></i>
                         <span class="hidden sm:inline">復原</span>
                     </button>
-                    <button type="button" onclick="clearCanvas()" class="px-2.5 py-1.5 rounded-lg text-xs bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/25 transition flex items-center gap-1" title="清空畫布">
+                    <button type="button" onclick="clearCanvas()" class="touch-target-min px-3 py-2 rounded-xl text-xs bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/25 transition flex items-center gap-1" title="清空畫布">
                         <i class="fa-solid fa-trash-can"></i>
                         <span>清空</span>
                     </button>
                 </div>
             </div>
 
-            <!-- 畫布本體：手機預設 480px、桌面預設 560px -->
-            <div id="canvas-wrapper" class="relative w-full h-[480px] sm:h-[560px] canvas-grid touch-none select-none transition-[height] duration-200">
+            <!-- 畫布本體：手機預設 460px、桌面預設 560px -->
+            <div id="canvas-wrapper" class="relative w-full h-[460px] sm:h-[560px] canvas-grid touch-none select-none transition-[height] duration-200">
                 <canvas id="scratchpad" class="w-full h-full block cursor-crosshair"></canvas>
-                <div id="canvas-hint" class="pointer-events-none absolute inset-0 flex items-center justify-center text-slate-600 text-sm select-none">
+                <div id="canvas-hint" class="pointer-events-none absolute inset-0 flex items-center justify-center text-slate-600 text-sm select-none px-4 text-center">
                     <span><i class="fa-solid fa-pen mr-1.5"></i>在此用手指或觸控筆書寫計算過程</span>
                 </div>
             </div>
@@ -319,29 +362,29 @@
             <div class="flex flex-col sm:flex-row gap-2.5">
                 <div class="flex-1 relative">
                     <input type="text" id="answer-input" placeholder="輸入最終答案 (或直接寫於上方計算紙)..." 
-                        class="w-full bg-slate-950 border border-slate-700 focus:border-sky-400 rounded-xl px-4 py-3 text-base text-white placeholder-slate-500 outline-none transition"
+                        class="w-full min-h-[48px] bg-slate-950 border border-slate-700 focus:border-sky-400 rounded-xl pl-4 pr-11 py-3 text-base text-white placeholder-slate-500 outline-none transition"
                         autocomplete="off">
-                    <button type="button" onclick="document.getElementById('answer-input').value=''" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 p-1">
+                    <button type="button" onclick="document.getElementById('answer-input').value=''" aria-label="清除輸入答案" class="touch-target-min w-10 h-10 absolute right-1 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 flex items-center justify-center">
                         <i class="fa-solid fa-circle-xmark"></i>
                     </button>
                 </div>
-                <button type="button" id="btn-check-answer" onclick="checkAnswerWithAI()" class="px-6 py-3 rounded-xl font-bold text-base bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-950/50 transition flex items-center justify-center gap-2 active:scale-95 whitespace-nowrap">
+                <button type="button" id="btn-check-answer" onclick="checkAnswerWithAI()" class="touch-target-min px-6 py-3 rounded-xl font-bold text-base bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-950/50 transition flex items-center justify-center gap-2 active:scale-95 whitespace-nowrap">
                     <i class="fa-solid fa-check-double"></i>
                     <span>對答案</span>
                 </button>
             </div>
 
-            <!-- 快速數學符號小鍵盤 -->
+            <!-- 快速數學符號小鍵盤（皆 >= 44px 高度） -->
             <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-0.5">
                 <span class="text-xs text-slate-400 mr-1 whitespace-nowrap">符號：</span>
-                <button type="button" onclick="insertSymbol('√')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-700 text-slate-200 font-mono text-sm border border-slate-700 active:bg-sky-500 active:text-slate-950">√</button>
-                <button type="button" onclick="insertSymbol('²')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-700 text-slate-200 font-mono text-sm border border-slate-700 active:bg-sky-500 active:text-slate-950">²</button>
-                <button type="button" onclick="insertSymbol('±')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-700 text-slate-200 font-mono text-sm border border-slate-700 active:bg-sky-500 active:text-slate-950">±</button>
-                <button type="button" onclick="insertSymbol('/')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-700 text-slate-200 font-mono text-sm border border-slate-700 active:bg-sky-500 active:text-slate-950">/</button>
-                <button type="button" onclick="insertSymbol('x=')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-700 text-slate-200 font-mono text-sm border border-slate-700 active:bg-sky-500 active:text-slate-950">x=</button>
-                <button type="button" onclick="insertSymbol('或')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-700 text-slate-200 font-sans text-xs font-medium border border-slate-700 active:bg-sky-500 active:text-slate-950">或</button>
-                <button type="button" onclick="insertSymbol('(')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-700 text-slate-200 font-mono text-sm border border-slate-700 active:bg-sky-500 active:text-slate-950">(</button>
-                <button type="button" onclick="insertSymbol(')')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-700 text-slate-200 font-mono text-sm border border-slate-700 active:bg-sky-500 active:text-slate-950">)</button>
+                <button type="button" onclick="insertSymbol('√')" class="touch-target-min px-3.5 rounded-xl bg-slate-900 hover:bg-slate-700 text-slate-200 font-mono text-sm border border-slate-700 active:bg-sky-500 active:text-slate-950 shrink-0">√</button>
+                <button type="button" onclick="insertSymbol('²')" class="touch-target-min px-3.5 rounded-xl bg-slate-900 hover:bg-slate-700 text-slate-200 font-mono text-sm border border-slate-700 active:bg-sky-500 active:text-slate-950 shrink-0">²</button>
+                <button type="button" onclick="insertSymbol('±')" class="touch-target-min px-3.5 rounded-xl bg-slate-900 hover:bg-slate-700 text-slate-200 font-mono text-sm border border-slate-700 active:bg-sky-500 active:text-slate-950 shrink-0">±</button>
+                <button type="button" onclick="insertSymbol('/')" class="touch-target-min px-3.5 rounded-xl bg-slate-900 hover:bg-slate-700 text-slate-200 font-mono text-sm border border-slate-700 active:bg-sky-500 active:text-slate-950 shrink-0">/</button>
+                <button type="button" onclick="insertSymbol('x=')" class="touch-target-min px-3.5 rounded-xl bg-slate-900 hover:bg-slate-700 text-slate-200 font-mono text-sm border border-slate-700 active:bg-sky-500 active:text-slate-950 shrink-0">x=</button>
+                <button type="button" onclick="insertSymbol('或')" class="touch-target-min px-3.5 rounded-xl bg-slate-900 hover:bg-slate-700 text-slate-200 font-sans text-xs font-medium border border-slate-700 active:bg-sky-500 active:text-slate-950 shrink-0">或</button>
+                <button type="button" onclick="insertSymbol('(')" class="touch-target-min px-3.5 rounded-xl bg-slate-900 hover:bg-slate-700 text-slate-200 font-mono text-sm border border-slate-700 active:bg-sky-500 active:text-slate-950 shrink-0">(</button>
+                <button type="button" onclick="insertSymbol(')')" class="touch-target-min px-3.5 rounded-xl bg-slate-900 hover:bg-slate-700 text-slate-200 font-mono text-sm border border-slate-700 active:bg-sky-500 active:text-slate-950 shrink-0">)</button>
             </div>
         </section>
 
@@ -361,7 +404,7 @@
                             <p id="result-subtitle" class="text-xs opacity-80"></p>
                         </div>
                     </div>
-                    <button type="button" onclick="generateLocalQuestion()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 text-white transition">
+                    <button type="button" onclick="generateLocalQuestion()" class="touch-target-min px-4 py-2 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 text-white transition flex items-center">
                         下一題 <i class="fa-solid fa-arrow-right ml-1"></i>
                     </button>
                 </div>
@@ -391,30 +434,30 @@
         <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full max-h-[85vh] flex flex-col shadow-2xl">
             <div class="p-4 border-b border-slate-800 flex items-center justify-between">
                 <h3 class="font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-bookmark text-sky-400"></i> 翰林國二上全冊 (1-1～4-3) 核心公式速查
+                    <i class="fa-solid fa-bookmark text-sky-400"></i> 115 翰林國二上（第3冊 · 1-1～4-3）重點速查
                 </h3>
-                <button type="button" onclick="toggleSummaryModal()" class="text-slate-400 hover:text-white p-1">
+                <button type="button" onclick="toggleSummaryModal()" aria-label="關閉重點速查" class="touch-target-min w-11 h-11 text-slate-400 hover:text-white flex items-center justify-center rounded-xl">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
             <!-- 彈窗內章節切換頁籤 -->
             <div class="px-4 py-2.5 bg-slate-950 border-b border-slate-800 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-                <button type="button" onclick="switchSummaryTab('all')" data-sum="all" class="sum-tab px-3 py-1 rounded-lg text-xs font-bold bg-sky-500 text-slate-950 whitespace-nowrap">全部</button>
-                <button type="button" onclick="switchSummaryTab('1')" data-sum="1" class="sum-tab px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap">第1章 多項式</button>
-                <button type="button" onclick="switchSummaryTab('2')" data-sum="2" class="sum-tab px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap">第2章 方根與畢氏</button>
-                <button type="button" onclick="switchSummaryTab('3')" data-sum="3" class="sum-tab px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap">第3章 因式分解</button>
-                <button type="button" onclick="switchSummaryTab('4')" data-sum="4" class="sum-tab px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap">第4章 一元二次方程式</button>
+                <button type="button" onclick="switchSummaryTab('all')" data-sum="all" class="sum-tab touch-target-min px-3.5 rounded-xl text-xs font-bold bg-sky-500 text-slate-950 whitespace-nowrap">全部</button>
+                <button type="button" onclick="switchSummaryTab('1')" data-sum="1" class="sum-tab touch-target-min px-3.5 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap">第1章 多項式與公式</button>
+                <button type="button" onclick="switchSummaryTab('2')" data-sum="2" class="sum-tab touch-target-min px-3.5 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap">第2章 方根與畢氏</button>
+                <button type="button" onclick="switchSummaryTab('3')" data-sum="3" class="sum-tab touch-target-min px-3.5 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap">第3章 因式分解</button>
+                <button type="button" onclick="switchSummaryTab('4')" data-sum="4" class="sum-tab touch-target-min px-3.5 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap">第4章 一元二次方程式</button>
             </div>
 
             <div class="p-4 overflow-y-auto space-y-3 text-sm text-slate-300" id="summary-cards-container">
                 <!-- 第1章 -->
                 <div data-sum-ch="1" class="sum-card p-3.5 rounded-xl bg-slate-950 border border-slate-800">
-                    <div class="font-bold text-sky-400 mb-1.5">第1章 乘法公式與多項式 (1-1 ～ 1-3)</div>
+                    <div class="font-bold text-sky-400 mb-1.5">第1章 多項式與乘法公式 (1-1 ～ 1-3)</div>
                     <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm">
-                        <li><b>1-1 乘法公式</b>：和平方 (a+b)<sup>2</sup> = a<sup>2</sup>+2ab+b<sup>2</sup>；差平方 (a-b)<sup>2</sup> = a<sup>2</sup>-2ab+b<sup>2</sup>；平方差 (a+b)(a-b) = a<sup>2</sup>-b<sup>2</sup>。</li>
-                        <li><b>1-2 多項式加減</b>：x 不可在分母、根號或絕對值內；同類項才能合併係數。</li>
-                        <li><b>1-3 多項式乘除</b>：被除式 ＝ 除式 × 商式 ＋ 餘式（注意：餘式次數必須小於除式次數，缺項要補 0）。</li>
+                        <li><b>1-1 多項式與加減法</b>：x 不可在分母、根號或絕對值內；去括號遇減號全體變號，同類項合併係數。</li>
+                        <li><b>1-2 多項式乘除</b>：被除式 ＝ 除式 × 商式 ＋ 餘式（餘式次數必小於除式次數，缺項要補 0）。</li>
+                        <li><b>1-3 乘法公式</b>：(a+b)<sup>2</sup> = a<sup>2</sup>+2ab+b<sup>2</sup>；(a-b)<sup>2</sup> = a<sup>2</sup>-2ab+b<sup>2</sup>；(a+b)(a-b) = a<sup>2</sup>-b<sup>2</sup>。</li>
                     </ul>
                 </div>
                 <!-- 第2章 -->
@@ -456,21 +499,29 @@
         // ==========================================
         // 1. 全域狀態與環境設定
         // ==========================================
-        const apiKey = ""; // 由執行環境自動注入
+        const apiKey = ""; // 由執行環境自動注入（無 Key 時自動走本地題庫/備援批改）
         const GEMINI_MODEL = "gemini-2.5-flash";
 
+        const CHAPTER_LABELS = {
+            'all': '第3冊全冊（第1～4章）',
+            '1': '第1章 多項式與乘法公式',
+            '2': '第2章 二次方根與畢氏定理',
+            '3': '第3章 因式分解',
+            '4': '第4章 一元二次方程式'
+        };
+
         const UNIT_NAMES = {
-            '1-1': '1-1 乘法公式',
-            '1-2': '1-2 多項式與其加減運算',
-            '1-3': '1-3 多項式的乘除運算',
+            '1-1': '1-1 多項式與加減法',
+            '1-2': '1-2 多項式的乘法與除法',
+            '1-3': '1-3 乘法公式',
             '2-1': '2-1 二次方根的意義',
             '2-2': '2-2 根式的運算',
             '2-3': '2-3 畢氏定理',
-            '3-1': '3-1 提公因式與乘法公式',
-            '3-2': '3-2 十字交乘法',
-            '4-1': '4-1 因式分解解一元二次方程式',
+            '3-1': '3-1 提公因式與乘法公式因式分解',
+            '3-2': '3-2 利用十字交乘法因式分解',
+            '4-1': '4-1 因式分解法解一元二次方程式',
             '4-2': '4-2 配方法與公式解',
-            '4-3': '4-3 一元二次方程式應用問題'
+            '4-3': '4-3 一元二次方程式的應用問題'
         };
 
         const ALL_UNITS = ['1-1', '1-2', '1-3', '2-1', '2-2', '2-3', '3-1', '3-2', '4-1', '4-2', '4-3'];
@@ -482,7 +533,7 @@
         let chatHistory = [];
 
         // ==========================================
-        // 2. 輔助與導覽切換函式
+        // 2. 輔助與獨立章節/單元切換函式
         // ==========================================
         function randInt(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -490,6 +541,18 @@
 
         function pickRandom(arr) {
             return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function sanitizeMathText(input) {
+            if (!input || typeof input !== 'string') return '';
+            return input
+                .replace(/\$\$/g, '')
+                .replace(/\$/g, '')
+                .replace(/\\sqrt\{([^}]+)\}/g, '√($1)')
+                .replace(/\\pm/g, '±')
+                .replace(/\\times/g, '×')
+                .replace(/\\div/g, '÷')
+                .replace(/\^2/g, '²');
         }
 
         function showToast(message) {
@@ -512,9 +575,9 @@
         function switchSummaryTab(ch) {
             document.querySelectorAll('.sum-tab').forEach(btn => {
                 if (btn.getAttribute('data-sum') === ch) {
-                    btn.className = 'sum-tab px-3 py-1 rounded-lg text-xs font-bold bg-sky-500 text-slate-950 whitespace-nowrap';
+                    btn.className = 'sum-tab touch-target-min px-3.5 rounded-xl text-xs font-bold bg-sky-500 text-slate-950 whitespace-nowrap';
                 } else {
-                    btn.className = 'sum-tab px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap';
+                    btn.className = 'sum-tab touch-target-min px-3.5 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap';
                 }
             });
             document.querySelectorAll('.sum-card').forEach(card => {
@@ -536,31 +599,50 @@
             input.setSelectionRange(start + sym.length, start + sym.length);
         }
 
+        function refreshChapterUI() {
+            document.querySelectorAll('.ch-btn').forEach(btn => {
+                if (btn.getAttribute('data-ch') === currentChapter) {
+                    btn.className = btn.getAttribute('data-ch') === '4'
+                        ? 'ch-btn touch-target-min col-span-2 sm:col-span-1 px-2.5 py-2 rounded-lg text-xs font-bold transition bg-sky-500 text-slate-950 shadow-sm flex items-center justify-center'
+                        : 'ch-btn touch-target-min px-2.5 py-2 rounded-lg text-xs font-bold transition bg-sky-500 text-slate-950 shadow-sm flex items-center justify-center';
+                } else {
+                    btn.className = btn.getAttribute('data-ch') === '4'
+                        ? 'ch-btn touch-target-min col-span-2 sm:col-span-1 px-2.5 py-2 rounded-lg text-xs font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center justify-center'
+                        : 'ch-btn touch-target-min px-2.5 py-2 rounded-lg text-xs font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center justify-center';
+                }
+            });
+            const chLabel = document.getElementById('active-chapter-label');
+            if (chLabel) chLabel.textContent = '目前：' + (CHAPTER_LABELS[currentChapter] || CHAPTER_LABELS.all);
+        }
+
+        function refreshUnitUI() {
+            document.querySelectorAll('.unit-btn').forEach(btn => {
+                const isSelected = btn.getAttribute('data-unit') === currentUnit;
+                if (isSelected) {
+                    btn.className = 'unit-btn touch-target-min shrink-0 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition bg-sky-500/20 text-sky-300 border border-sky-500/40 flex items-center';
+                } else {
+                    btn.className = 'unit-btn touch-target-min shrink-0 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80 flex items-center';
+                }
+            });
+            const unitLabel = document.getElementById('active-unit-label');
+            if (unitLabel) {
+                unitLabel.textContent = currentUnit === 'all'
+                    ? (currentChapter === 'all' ? '全部 11 單元' : `${CHAPTER_LABELS[currentChapter]} · 全部單元`)
+                    : (UNIT_NAMES[currentUnit] || currentUnit);
+            }
+        }
+
+        // 獨立的「章節切換」：只切換章節範圍，並重設單元為該章「全部單元」，不會把章節與單元混在一起
         function selectChapter(ch) {
             currentChapter = ch;
-            document.querySelectorAll('.ch-btn').forEach(btn => {
-                if (btn.getAttribute('data-ch') === ch) {
-                    btn.className = 'ch-btn px-3 py-1 rounded-lg text-xs font-bold whitespace-nowrap transition bg-sky-500 text-slate-950 shadow-sm';
-                } else {
-                    btn.className = 'ch-btn px-3 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition bg-slate-800 text-slate-300 hover:bg-slate-700';
-                }
-            });
-
-            // 篩選第二排單元藥丸顯示，並保持 shrink-0 與橫向可捲動
-            document.querySelectorAll('.unit-btn').forEach(btn => {
-                const uCh = btn.getAttribute('data-ch');
-                if (ch === 'all' || uCh === 'all' || uCh === ch) {
-                    btn.classList.remove('hidden');
-                } else {
-                    btn.classList.add('hidden');
-                }
-            });
+            currentUnit = 'all';
+            refreshChapterUI();
+            refreshUnitUI();
 
             const unitNav = document.getElementById('unit-tabs');
             if (unitNav) unitNav.scrollTo({ left: 0, behavior: 'smooth' });
 
-            // 切換章節時預設選取該章「全部隨機」
-            selectUnit('all');
+            generateLocalQuestion();
         }
 
         function scrollUnitTrack(offset) {
@@ -569,7 +651,7 @@
             unitNav.scrollBy({ left: offset, behavior: 'smooth' });
         }
 
-        // 支援桌面滑鼠按住拖曳橫向捲動 1-1～4-3 單元列（不影響點擊按鈕）
+        // 支援桌面滑鼠按住拖曳橫向捲動 1-1～4-3 單元列（不影響手機原生觸控滑動與點擊）
         (function initUnitTrackDragScroll() {
             const track = document.getElementById('unit-tabs');
             if (!track) return;
@@ -591,7 +673,7 @@
                 if (!isPointerDown) return;
                 const x = e.pageX - track.offsetLeft;
                 const walk = (x - startX) * 1.3;
-                if (Math.abs(walk) > 4) didDrag = true;
+                if (Math.abs(walk) > 5) didDrag = true;
                 track.scrollLeft = startScrollLeft - walk;
             });
 
@@ -608,16 +690,17 @@
             }, true);
         })();
 
+        // 獨立的「單元選擇」：點選任一 1-1～4-3 單元時，同步更新所屬章節並出該單元題目
         function selectUnit(unit) {
             currentUnit = unit;
-            document.querySelectorAll('.unit-btn').forEach(btn => {
-                const isSelected = btn.getAttribute('data-unit') === unit;
-                if (isSelected) {
-                    btn.className = 'unit-btn shrink-0 px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition bg-sky-500/20 text-sky-300 border border-sky-500/40';
-                } else {
-                    btn.className = 'unit-btn shrink-0 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 border border-slate-700/80';
+            if (unit !== 'all') {
+                const unitChapter = unit.split('-')[0];
+                if (ALL_UNITS.includes(unit)) {
+                    currentChapter = unitChapter;
                 }
-            });
+            }
+            refreshChapterUI();
+            refreshUnitUI();
             generateLocalQuestion();
         }
 
@@ -629,89 +712,15 @@
         }
 
         // ==========================================
-        // 3. 本地 1-1 至 4-3 全冊 11 單元動態題庫
+        // 3. 本地 1-1 至 4-3 全冊 11 單元動態題庫（含各單元 SVG 圖形）
         // ==========================================
 
-        // 1-1 乘法公式
+        // 1-1 多項式與加減法（含代數條形/多項式項次 SVG）
         function buildQuestion1_1() {
-            const type = randInt(1, 3);
-            if (type === 1) {
-                // 數字巧算 (如 199² 或 203×197)
-                const base = pickRandom([100, 200, 300, 500]);
-                const d = randInt(1, 5);
-                if (Math.random() > 0.5) {
-                    const n = base - d;
-                    const ans = n * n;
-                    return {
-                        unit: '1-1',
-                        source: '即時題庫',
-                        html: `利用乘法公式計算下列各式的值：\n${n}<sup>2</sup> = ？`,
-                        answer: `${ans}`,
-                        explanation: `1. 將 ${n} 改寫為 (${base} - ${d})：\n   ${n}² = (${base} - ${d})²\n2. 套用差平方公式 (a - b)² = a² - 2ab + b²：\n   = ${base}² - 2 × ${base} × ${d} + ${d}²\n   = ${base * base} - ${2 * base * d} + ${d * d} = ${ans}`,
-                        svg: null
-                    };
-                } else {
-                    const ans = base * base - d * d;
-                    return {
-                        unit: '1-1',
-                        source: '即時題庫',
-                        html: `利用平方差公式計算：\n${base + d} × ${base - d} = ？`,
-                        answer: `${ans}`,
-                        explanation: `1. 觀察兩數為 (${base} + ${d}) 與 (${base} - ${d})：\n2. 套用平方差公式 (a + b)(a - b) = a² - b²：\n   = ${base}² - ${d}² = ${base * base} - ${d * d} = ${ans}`,
-                        svg: null
-                    };
-                }
-            } else if (type === 2) {
-                // 多項式和平方/差平方展開
-                const a = pickRandom([2, 3, 4]);
-                const b = pickRandom([1, 3, 5]);
-                const isPlus = Math.random() > 0.5;
-                const sign = isPlus ? '+' : '-';
-                const c2 = a * a;
-                const c1 = 2 * a * b;
-                const c0 = b * b;
-                return {
-                    unit: '1-1',
-                    source: '即時題庫',
-                    html: `展開並化簡下列多項式：\n(${a}x ${sign} ${b})<sup>2</sup>`,
-                    answer: `${c2}x² ${sign} ${c1}x + ${c0}`,
-                    explanation: `套用${isPlus ? '和' : '差'}平方公式 (A ${sign} B)² = A² ${sign} 2AB + B²：\n(${a}x)² ${sign} 2(${a}x)(${b}) + ${b}²\n= ${c2}x² ${sign} ${c1}x + ${c0}`,
-                    svg: null
-                };
-            } else {
-                // 正方形分割面積圖解 (a+b)²
-                const a = randInt(4, 8);
-                const b = randInt(2, 3);
-                const svg = `
-                    <svg width="160" height="160" viewBox="0 0 160 160">
-                        <rect x="25" y="25" width="80" height="80" fill="rgba(56,189,248,0.18)" stroke="#38bdf8" stroke-width="2"/>
-                        <rect x="105" y="25" width="30" height="80" fill="rgba(16,185,129,0.15)" stroke="#38bdf8" stroke-width="2"/>
-                        <rect x="25" y="105" width="80" height="30" fill="rgba(16,185,129,0.15)" stroke="#38bdf8" stroke-width="2"/>
-                        <rect x="105" y="105" width="30" height="30" fill="rgba(245,158,11,0.2)" stroke="#38bdf8" stroke-width="2"/>
-                        <text x="60" y="18" fill="#f8fafc" font-size="13" font-weight="bold">x</text>
-                        <text x="116" y="18" fill="#fbbf24" font-size="13" font-weight="bold">${b}</text>
-                        <text x="10" y="70" fill="#f8fafc" font-size="13" font-weight="bold">x</text>
-                        <text x="10" y="124" fill="#fbbf24" font-size="13" font-weight="bold">${b}</text>
-                    </svg>
-                `;
-                return {
-                    unit: '1-1',
-                    source: '即時題庫',
-                    html: `如圖，將邊長為 x 的正方形兩邊各延長 ${b} 單位形成大正方形，請問大正方形的總面積可用哪個多項式表示？`,
-                    answer: `x² + ${2 * b}x + ${b * b}`,
-                    explanation: `大正方形邊長為 (x + ${b})，面積為 (x + ${b})²\n由圖形四塊區域相加或和平方公式可得：\nx² + 2(x)(${b}) + ${b}² = x² + ${2 * b}x + ${b * b}`,
-                    svg: svg
-                };
-            }
-        }
-
-        // 1-2 多項式與其加減運算
-        function buildQuestion1_2() {
             const type = randInt(1, 2);
             if (type === 1) {
-                // 多項式減法（括號變號重點）
-                const a1 = randInt(2, 6), b1 = randInt(-5, 5) || 2, c1 = randInt(1, 9);
-                const a2 = randInt(1, 4), b2 = randInt(-6, -1), c2 = randInt(2, 8);
+                const a1 = randInt(3, 6), b1 = randInt(-5, 5) || 2, c1 = randInt(1, 9);
+                const a2 = randInt(1, 3), b2 = randInt(-6, -1), c2 = randInt(2, 8);
                 const ra = a1 - a2;
                 const rb = b1 - b2;
                 const rc = c1 - c2;
@@ -729,21 +738,31 @@
                 const b1Str = b1 >= 0 ? `+ ${b1}x` : `- ${Math.abs(b1)}x`;
                 const b2Str = `- ${Math.abs(b2)}x`;
 
+                const svg = `
+                    <svg width="240" height="72" viewBox="0 0 240 72">
+                        <rect x="10" y="14" width="68" height="44" rx="8" fill="rgba(56,189,248,0.16)" stroke="#38bdf8" stroke-width="1.5"/>
+                        <text x="44" y="41" text-anchor="middle" fill="#7dd3fc" font-size="13" font-weight="bold">x² 項</text>
+                        <rect x="86" y="14" width="68" height="44" rx="8" fill="rgba(251,191,36,0.16)" stroke="#fbbf24" stroke-width="1.5"/>
+                        <text x="120" y="41" text-anchor="middle" fill="#fde68a" font-size="13" font-weight="bold">x 項</text>
+                        <rect x="162" y="14" width="68" height="44" rx="8" fill="rgba(52,211,153,0.16)" stroke="#34d399" stroke-width="1.5"/>
+                        <text x="196" y="41" text-anchor="middle" fill="#a7f3d0" font-size="13" font-weight="bold">常數項</text>
+                    </svg>
+                `;
+
                 return {
-                    unit: '1-2',
+                    unit: '1-1',
                     source: '即時題庫',
                     html: `化簡下列多項式並按降冪排列：\n(${a1}x<sup>2</sup> ${b1Str} + ${c1}) - (${a2}x<sup>2</sup> ${b2Str} + ${c2})`,
                     answer: ans,
                     explanation: `1. 去括號（減號後方括號內各項皆需變號）：\n   = ${a1}x² ${b1Str} + ${c1} - ${a2}x² + ${Math.abs(b2)}x - ${c2}\n2. 合併同類項：\n   = (${a1} - ${a2})x² + (${b1} + ${Math.abs(b2)})x + (${c1} - ${c2})\n   = ${ans}`,
-                    svg: null
+                    svg: svg
                 };
             } else {
-                // 已知多項式求係數和或次數
                 const k = randInt(2, 5);
                 const m = randInt(1, 6);
                 const c = randInt(-7, -2);
                 return {
-                    unit: '1-2',
+                    unit: '1-1',
                     source: '即時題庫',
                     html: `已知多項式 A = -${k}x<sup>3</sup> + ${m}x<sup>2</sup> - x ${c}，請問多項式 A 的「次數」與「各項係數總和」分別為何？（請以逗號分隔，如：3, 5）`,
                     answer: `3, ${-k + m - 1 + c}`,
@@ -753,15 +772,13 @@
             }
         }
 
-        // 1-3 多項式的乘除運算
-        function buildQuestion1_3() {
+        // 1-2 多項式的乘法與除法（含長除法關係 SVG）
+        function buildQuestion1_2() {
             const type = randInt(1, 2);
             if (type === 1) {
-                // 多項式乘法展開
                 const a = pickRandom([2, 3]);
                 const b = pickRandom([-4, -3, -2, 2, 3, 4]);
                 const c = pickRandom([-5, -3, -1, 1, 3, 5]);
-                // (ax + b)(x + c) = ax² + (ac + b)x + bc
                 const c2 = a;
                 const c1 = a * c + b;
                 const c0 = b * c;
@@ -771,7 +788,7 @@
                 const endStr = c0 > 0 ? ` + ${c0}` : ` - ${Math.abs(c0)}`;
 
                 return {
-                    unit: '1-3',
+                    unit: '1-2',
                     source: '即時題庫',
                     html: `計算下列多項式乘積並按降冪排列：\n(${a}x ${bStr})(x ${cStr})`,
                     answer: `${c2}x²${midStr}${endStr}`,
@@ -779,43 +796,126 @@
                     svg: null
                 };
             } else {
-                // 多項式除法求餘式（被除式 = 除式 × 商式 + 餘式）
                 const p = pickRandom([1, 2, 3]);
                 const q = pickRandom([-4, -2, 2, 4]);
                 const r = pickRandom([-5, -3, 3, 5, 7]);
-                // 被除式 = (x + p)(2x + q) + r = 2x² + (2p + q)x + (pq + r)
                 const b = 2 * p + q;
                 const c = p * q + r;
                 const bStr = b === 0 ? '' : (b > 0 ? ` + ${b}x` : ` - ${Math.abs(b)}x`);
                 const cStr = c === 0 ? '' : (c > 0 ? ` + ${c}` : ` - ${Math.abs(c)}`);
 
+                const svg = `
+                    <svg width="250" height="68" viewBox="0 0 250 68">
+                        <rect x="8" y="12" width="104" height="44" rx="8" fill="rgba(56,189,248,0.14)" stroke="#38bdf8" stroke-width="1.5"/>
+                        <text x="60" y="39" text-anchor="middle" fill="#e0f2fe" font-size="12" font-weight="bold">被除式 (2次)</text>
+                        <text x="123" y="39" text-anchor="middle" fill="#94a3b8" font-size="14" font-weight="bold">=</text>
+                        <rect x="134" y="12" width="66" height="44" rx="8" fill="rgba(168,85,247,0.15)" stroke="#c084fc" stroke-width="1.5"/>
+                        <text x="167" y="39" text-anchor="middle" fill="#f3e8ff" font-size="12" font-weight="bold">除式×商式</text>
+                        <text x="207" y="39" text-anchor="middle" fill="#94a3b8" font-size="14" font-weight="bold">+</text>
+                        <rect x="214" y="12" width="30" height="44" rx="8" fill="rgba(251,191,36,0.18)" stroke="#fbbf24" stroke-width="1.5"/>
+                        <text x="229" y="39" text-anchor="middle" fill="#fef08a" font-size="12" font-weight="bold">餘式</text>
+                    </svg>
+                `;
+
                 return {
-                    unit: '1-3',
+                    unit: '1-2',
                     source: '即時題庫',
                     html: `求多項式 (2x<sup>2</sup>${bStr}${cStr}) 除以 (x + ${p}) 的「餘式」為何？`,
                     answer: `${r}`,
                     explanation: `利用長除法（或分離係數法）：\n1. 2x² ÷ x 得商式首項 2x，減去 2x(x + ${p}) = 2x² + ${2 * p}x，餘下 ${q}x${cStr}。\n2. ${q}x ÷ x 得商式常數項 ${q}，減去 ${q}(x + ${p}) = ${q}x + ${p * q}。\n3. 餘式 = ${c} - (${p * q}) = ${r}`,
-                    svg: null
+                    svg: svg
                 };
             }
         }
 
-        // 2-1 二次方根的意義
+        // 1-3 乘法公式（含正方形面積分割 SVG）
+        function buildQuestion1_3() {
+            const type = randInt(1, 3);
+            if (type === 1) {
+                const base = pickRandom([100, 200, 300, 500]);
+                const d = randInt(1, 5);
+                if (Math.random() > 0.5) {
+                    const n = base - d;
+                    const ans = n * n;
+                    return {
+                        unit: '1-3',
+                        source: '即時題庫',
+                        html: `利用乘法公式計算下列各式的值：\n${n}<sup>2</sup> = ？`,
+                        answer: `${ans}`,
+                        explanation: `1. 將 ${n} 改寫為 (${base} - ${d})：\n   ${n}² = (${base} - ${d})²\n2. 套用差平方公式 (a - b)² = a² - 2ab + b²：\n   = ${base}² - 2 × ${base} × ${d} + ${d}²\n   = ${base * base} - ${2 * base * d} + ${d * d} = ${ans}`,
+                        svg: null
+                    };
+                } else {
+                    const ans = base * base - d * d;
+                    return {
+                        unit: '1-3',
+                        source: '即時題庫',
+                        html: `利用平方差公式計算：\n${base + d} × ${base - d} = ？`,
+                        answer: `${ans}`,
+                        explanation: `1. 觀察兩數為 (${base} + ${d}) 與 (${base} - ${d})：\n2. 套用平方差公式 (a + b)(a - b) = a² - b²：\n   = ${base}² - ${d}² = ${base * base} - ${d * d} = ${ans}`,
+                        svg: null
+                    };
+                }
+            } else if (type === 2) {
+                const a = pickRandom([2, 3, 4]);
+                const b = pickRandom([1, 3, 5]);
+                const isPlus = Math.random() > 0.5;
+                const sign = isPlus ? '+' : '-';
+                return {
+                    unit: '1-3',
+                    source: '即時題庫',
+                    html: `展開並化簡下列多項式：\n(${a}x ${sign} ${b})<sup>2</sup>`,
+                    answer: `${a * a}x² ${sign} ${2 * a * b}x + ${b * b}`,
+                    explanation: `套用${isPlus ? '和' : '差'}平方公式 (A ${sign} B)² = A² ${sign} 2AB + B²：\n(${a}x)² ${sign} 2(${a}x)(${b}) + ${b}²\n= ${a * a}x² ${sign} ${2 * a * b}x + ${b * b}`,
+                    svg: null
+                };
+            } else {
+                const b = randInt(2, 4);
+                const svg = `
+                    <svg width="160" height="160" viewBox="0 0 160 160">
+                        <rect x="25" y="25" width="80" height="80" fill="rgba(56,189,248,0.18)" stroke="#38bdf8" stroke-width="2"/>
+                        <rect x="105" y="25" width="30" height="80" fill="rgba(16,185,129,0.15)" stroke="#38bdf8" stroke-width="2"/>
+                        <rect x="25" y="105" width="80" height="30" fill="rgba(16,185,129,0.15)" stroke="#38bdf8" stroke-width="2"/>
+                        <rect x="105" y="105" width="30" height="30" fill="rgba(245,158,11,0.2)" stroke="#38bdf8" stroke-width="2"/>
+                        <text x="60" y="18" fill="#f8fafc" font-size="13" font-weight="bold">x</text>
+                        <text x="116" y="18" fill="#fbbf24" font-size="13" font-weight="bold">${b}</text>
+                        <text x="10" y="70" fill="#f8fafc" font-size="13" font-weight="bold">x</text>
+                        <text x="10" y="124" fill="#fbbf24" font-size="13" font-weight="bold">${b}</text>
+                    </svg>
+                `;
+                return {
+                    unit: '1-3',
+                    source: '即時題庫',
+                    html: `如圖，將邊長為 x 的正方形兩邊各延長 ${b} 單位形成大正方形，請問大正方形的總面積可用哪個多項式表示？`,
+                    answer: `x² + ${2 * b}x + ${b * b}`,
+                    explanation: `大正方形邊長為 (x + ${b})，面積為 (x + ${b})²\n由圖形四塊區域相加或和平方公式可得：\nx² + 2(x)(${b}) + ${b}² = x² + ${2 * b}x + ${b * b}`,
+                    svg: svg
+                };
+            }
+        }
+
+        // 2-1 二次方根的意義（含平方根與面積關係 SVG）
         function buildQuestion2_1() {
             const type = randInt(1, 3);
             if (type === 1) {
-                // √(a²) = |a| 陷阱題
                 const n = randInt(5, 19);
+                const svg = `
+                    <svg width="210" height="64" viewBox="0 0 210 64">
+                        <rect x="12" y="10" width="84" height="44" rx="8" fill="rgba(56,189,248,0.14)" stroke="#38bdf8" stroke-width="1.5"/>
+                        <text x="54" y="37" text-anchor="middle" fill="#7dd3fc" font-size="13" font-weight="bold">√(a²) = |a|</text>
+                        <rect x="112" y="10" width="86" height="44" rx="8" fill="rgba(52,211,153,0.14)" stroke="#34d399" stroke-width="1.5"/>
+                        <text x="155" y="37" text-anchor="middle" fill="#a7f3d0" font-size="13" font-weight="bold">必為非負數</text>
+                    </svg>
+                `;
                 return {
                     unit: '2-1',
                     source: '即時題庫',
                     html: `計算下列各式的值：\n√(-${n})<sup>2</sup> + (-√${n})<sup>2</sup> = ？`,
                     answer: `${2 * n}`,
                     explanation: `1. 根據二次方根定義 √(a²) = |a|：\n   √(-${n})² = |-${n}| = ${n}\n2. (-√${n})² = (-1)² × (√${n})² = ${n}\n3. 兩者相加：${n} + ${n} = ${2 * n}`,
-                    svg: null
+                    svg: svg
                 };
             } else if (type === 2) {
-                // 平方根求未知數
                 const root = randInt(4, 12);
                 const sq = root * root;
                 const offset = randInt(1, 9);
@@ -829,7 +929,6 @@
                     svg: null
                 };
             } else {
-                // 平方根有兩個解（±）
                 const n = pickRandom([9, 16, 25, 36, 49, 64, 81, 100]);
                 const r = Math.sqrt(n);
                 return {
@@ -843,7 +942,7 @@
             }
         }
 
-        // 2-2 根式的運算
+        // 2-2 根式的運算（含根式化簡與有理化 SVG）
         function buildQuestion2_2() {
             const type = randInt(1, 3);
             if (type === 1) {
@@ -868,13 +967,19 @@
                 const mult = randInt(1, 4);
                 const num = base * mult;
                 const ansStr = mult === 1 ? `√${base}` : `${mult}√${base}`;
+                const svg = `
+                    <svg width="220" height="58" viewBox="0 0 220 58">
+                        <rect x="14" y="10" width="192" height="38" rx="8" fill="rgba(56,189,248,0.12)" stroke="#38bdf8" stroke-width="1.5"/>
+                        <text x="110" y="34" text-anchor="middle" fill="#bae6fd" font-size="12" font-weight="bold">分母有理化：分子分母同乘 √${base}</text>
+                    </svg>
+                `;
                 return {
                     unit: '2-2',
                     source: '即時題庫',
                     html: `將下列根式有理化並化為最簡根式：\n${num} / √${base}`,
                     answer: ansStr,
                     explanation: `分子與分母同乘以 √${base}：\n(${num}√${base}) / ${base} = ${ansStr}`,
-                    svg: null
+                    svg: svg
                 };
             } else {
                 const a = pickRandom([3, 5, 6, 7, 8]);
@@ -890,7 +995,7 @@
             }
         }
 
-        // 2-3 畢氏定理
+        // 2-3 畢氏定理（含直角三角形 SVG）
         function buildQuestion2_3() {
             const type = randInt(1, 3);
             const triples = [[3, 4, 5], [5, 12, 13], [6, 8, 10], [8, 15, 17], [7, 24, 25], [9, 12, 15]];
@@ -945,7 +1050,7 @@
             }
         }
 
-        // 3-1 提公因式與乘法公式作因式分解
+        // 3-1 提公因式與乘法公式因式分解（含因式分解結構 SVG）
         function buildQuestion3_1() {
             const type = randInt(1, 3);
             if (type === 1) {
@@ -976,20 +1081,36 @@
             } else {
                 const k = randInt(2, 7);
                 const m = randInt(2, 5);
+                const svg = `
+                    <svg width="230" height="62" viewBox="0 0 230 62">
+                        <rect x="12" y="12" width="206" height="38" rx="8" fill="rgba(16,185,129,0.14)" stroke="#34d399" stroke-width="1.5"/>
+                        <text x="115" y="36" text-anchor="middle" fill="#a7f3d0" font-size="12" font-weight="bold">變號技巧：(${k} - x) = -(x - ${k})</text>
+                    </svg>
+                `;
                 return {
                     unit: '3-1',
                     source: '即時題庫',
                     html: `利用提公因式法與變號技巧因式分解：\nx(x - ${k}) + ${m}(${k} - x)`,
                     answer: `(x - ${k})(x - ${m})`,
                     explanation: `1. 利用 (${k} - x) = -(x - ${k}) 變號：\n   原式 = x(x - ${k}) - ${m}(x - ${k})\n2. 提出公因式 (x - ${k}) 得 (x - ${k})(x - ${m})`,
-                    svg: null
+                    svg: svg
                 };
             }
         }
 
-        // 3-2 十字交乘法
+        // 3-2 利用十字交乘法因式分解（含十字交乘示意 SVG）
         function buildQuestion3_2() {
             const type = randInt(1, 2);
+            const svg = `
+                <svg width="190" height="76" viewBox="0 0 190 76">
+                    <line x1="55" y1="14" x2="135" y2="62" stroke="#38bdf8" stroke-width="1.8"/>
+                    <line x1="55" y1="62" x2="135" y2="14" stroke="#fbbf24" stroke-width="1.8"/>
+                    <text x="34" y="20" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="bold">頭拆</text>
+                    <text x="34" y="66" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="bold">兩邊</text>
+                    <text x="156" y="20" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="bold">尾拆</text>
+                    <text x="156" y="66" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="bold">兩邊</text>
+                </svg>
+            `;
             if (type === 1) {
                 let p = pickRandom([-7, -6, -5, -4, -3, -2, 2, 3, 4, 5, 6, 7]);
                 let q = pickRandom([-6, -5, -4, -3, -2, 2, 3, 4, 5, 6]);
@@ -1005,7 +1126,7 @@
                     html: `利用十字交乘法因式分解：\nx<sup>2</sup> ${bStr} ${cStr}`,
                     answer: `${f1}${f2}`,
                     explanation: `常數項 ${c} = (${p}) × (${q})，且 (${p}) + (${q}) = ${b}，故分解為 ${f1}${f2}。`,
-                    svg: null
+                    svg: svg
                 };
             } else {
                 const a = pickRandom([2, 3]);
@@ -1022,16 +1143,15 @@
                     html: `利用十字交乘法因式分解：\n${a}x<sup>2</sup>${bStr}${cStr}`,
                     answer: `${f1}${f2}`,
                     explanation: `二次項拆為 ${a}x 與 x，常數項拆為 ${p} 與 ${q}，交叉相乘和為 ${b}x，故得 ${f1}${f2}。`,
-                    svg: null
+                    svg: svg
                 };
             }
         }
 
-        // 4-1 因式分解解一元二次方程式
+        // 4-1 因式分解法解一元二次方程式（含 A×B=0 概念 SVG）
         function buildQuestion4_1() {
             const type = randInt(1, 2);
             if (type === 1) {
-                // 十字交乘求解 (x - r1)(x - r2) = 0
                 let r1 = pickRandom([-6, -5, -4, -3, -2, 2, 3, 4, 5, 6]);
                 let r2 = pickRandom([-5, -4, -3, -2, 1, 2, 3, 4, 5]);
                 if (r1 === r2) r2 += 1;
@@ -1052,26 +1172,30 @@
                     svg: null
                 };
             } else {
-                // 提公因式求解 ax² = bx（易錯：不可同除 x）
                 const a = pickRandom([2, 3, 4]);
                 const k = pickRandom([3, 5, 7]);
                 const b = a * k;
+                const svg = `
+                    <svg width="240" height="62" viewBox="0 0 240 62">
+                        <rect x="10" y="12" width="220" height="38" rx="8" fill="rgba(244,63,94,0.14)" stroke="#fb7185" stroke-width="1.5"/>
+                        <text x="120" y="36" text-anchor="middle" fill="#fecdd3" font-size="12" font-weight="bold">注意：不可兩邊同除 x，以免漏解 x = 0</text>
+                    </svg>
+                `;
                 return {
                     unit: '4-1',
                     source: '即時題庫',
                     html: `解一元二次方程式：\n${a}x<sup>2</sup> = ${b}x`,
                     answer: `x=0 或 x=${k}`,
                     explanation: `1. 移項使右式為 0（切勿兩邊同除 x，否則會漏掉 x = 0 的根！）：\n   ${a}x² - ${b}x = 0\n2. 提出公因式 ${a}x：\n   ${a}x(x - ${k}) = 0\n3. 解得 x = 0 或 x = ${k}`,
-                    svg: null
+                    svg: svg
                 };
             }
         }
 
-        // 4-2 配方法與公式解
+        // 4-2 配方法與公式解（含判別式 D = b² - 4ac SVG）
         function buildQuestion4_2() {
             const type = randInt(1, 3);
             if (type === 1) {
-                // 配方法：求常數項 c 使 x² + bx + c 成完全平方式，或直接配方法求解
                 const half = randInt(2, 7);
                 const b = 2 * half;
                 const rhs = pickRandom([2, 3, 5, 6, 7]);
@@ -1086,21 +1210,25 @@
                     svg: null
                 };
             } else if (type === 2) {
-                // 判別式判斷根的性質 / 求重根時的未知數 k
                 const a = pickRandom([1, 2, 4]);
                 const halfB = randInt(3, 6);
                 const b = 2 * halfB;
                 const k = (b * b) / (4 * a);
+                const svg = `
+                    <svg width="230" height="62" viewBox="0 0 230 62">
+                        <rect x="12" y="12" width="206" height="38" rx="8" fill="rgba(56,189,248,0.14)" stroke="#38bdf8" stroke-width="1.5"/>
+                        <text x="115" y="36" text-anchor="middle" fill="#bae6fd" font-size="12" font-weight="bold">重根條件：判別式 D = b² - 4ac = 0</text>
+                    </svg>
+                `;
                 return {
                     unit: '4-2',
                     source: '即時題庫',
                     html: `已知一元二次方程式 ${a === 1 ? '' : a}x<sup>2</sup> - ${b}x + k = 0 有「重根」，求 k 的值。`,
                     answer: `${k}`,
                     explanation: `1. 一元二次方程式有重根的條件為判別式 D = b² - 4ac = 0。\n2. 代入 a = ${a}，b = -${b}，c = k：\n   (-${b})² - 4(${a})(k) = 0\n   ${b * b} - ${4 * a}k = 0\n3. 解得 k = ${b * b} ÷ ${4 * a} = ${k}`,
-                    svg: null
+                    svg: svg
                 };
             } else {
-                // 公式解（根號無法開盡）
                 const b = pickRandom([3, 5, 7]);
                 const c = -1;
                 const disc = b * b - 4 * 1 * c;
@@ -1115,14 +1243,13 @@
             }
         }
 
-        // 4-3 一元二次方程式應用問題（附 SVG 輔助圖）
+        // 4-3 一元二次方程式的應用問題（含矩形道路 SVG）
         function buildQuestion4_3() {
             const type = randInt(1, 2);
             if (type === 1) {
-                // 經典矩形十字道路寬度問題（附 SVG 圖形）
                 const W = 20;
                 const H = 14;
-                const xAns = 2; // (20-2)(14-2) = 18 * 12 = 216
+                const xAns = 2;
                 const remainArea = (W - xAns) * (H - xAns);
                 const svg = `
                     <svg width="230" height="145" viewBox="0 0 230 145">
@@ -1144,7 +1271,6 @@
                     svg: svg
                 };
             } else {
-                // 連續正整數平方和應用題
                 const n = randInt(4, 9);
                 const sum = n * n + (n + 1) * (n + 1);
                 return {
@@ -1189,7 +1315,7 @@
 
             if (unitTag) unitTag.textContent = UNIT_NAMES[qObj.unit] || qObj.unit;
             if (sourceTag) sourceTag.textContent = qObj.source || '即時題庫';
-            if (qText) qText.innerHTML = qObj.html || qObj.text || '';
+            if (qText) qText.innerHTML = sanitizeMathText(qObj.html || qObj.text || '');
 
             if (svgContainer) {
                 if (qObj.svg) {
@@ -1214,7 +1340,7 @@
         }
 
         // ==========================================
-        // 4. 超大互動手寫計算紙 (無損高度縮放與筆跡保留)
+        // 4. 超大無損互動手寫計算紙 (無損高度縮放與筆跡保留)
         // ==========================================
         const canvas = document.getElementById('scratchpad');
         const ctx = canvas ? canvas.getContext('2d', { willReadFrequently: true }) : null;
@@ -1253,14 +1379,14 @@
 
             if (isExpandedCanvas) {
                 canvasWrapper.classList.remove('h-[320px]', 'sm:h-[380px]');
-                canvasWrapper.classList.add('h-[480px]', 'sm:h-[560px]');
+                canvasWrapper.classList.add('h-[460px]', 'sm:h-[560px]');
                 if (label) label.textContent = '超大';
-                if (btn) btn.className = 'px-2.5 py-1.5 rounded-lg text-xs bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/35 transition flex items-center gap-1 font-medium';
+                if (btn) btn.className = 'touch-target-min px-3 py-2 rounded-xl text-xs bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/35 transition flex items-center gap-1 font-medium';
             } else {
-                canvasWrapper.classList.remove('h-[480px]', 'sm:h-[560px]');
+                canvasWrapper.classList.remove('h-[460px]', 'sm:h-[560px]');
                 canvasWrapper.classList.add('h-[320px]', 'sm:h-[380px]');
                 if (label) label.textContent = '標準';
-                if (btn) btn.className = 'px-2.5 py-1.5 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1';
+                if (btn) btn.className = 'touch-target-min px-3 py-2 rounded-xl text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1';
             }
 
             requestAnimationFrame(() => resizeCanvas());
@@ -1342,15 +1468,17 @@
             penColor = color;
             isEraser = false;
             const eraserBtn = document.getElementById('btn-eraser');
-            if (eraserBtn) eraserBtn.className = 'px-2.5 py-1.5 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1';
+            if (eraserBtn) eraserBtn.className = 'touch-target-min px-3 py-2 rounded-xl text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1';
 
             document.querySelectorAll('.color-btn').forEach(btn => {
+                const dot = btn.querySelector('span');
+                if (!dot) return;
                 if (btn.getAttribute('data-color') === color) {
-                    btn.classList.add('ring-2', 'ring-offset-2', 'ring-offset-slate-900', 'ring-sky-400', 'opacity-100');
-                    btn.classList.remove('opacity-75');
+                    dot.classList.add('ring-2', 'ring-offset-2', 'ring-offset-slate-900', 'ring-sky-400', 'opacity-100');
+                    dot.classList.remove('opacity-75');
                 } else {
-                    btn.classList.remove('ring-2', 'ring-offset-2', 'ring-offset-slate-900', 'ring-sky-400', 'opacity-100');
-                    btn.classList.add('opacity-75');
+                    dot.classList.remove('ring-2', 'ring-offset-2', 'ring-offset-slate-900', 'ring-sky-400', 'opacity-100');
+                    dot.classList.add('opacity-75');
                 }
             });
         }
@@ -1360,9 +1488,9 @@
             const eraserBtn = document.getElementById('btn-eraser');
             if (!eraserBtn) return;
             if (isEraser) {
-                eraserBtn.className = 'px-2.5 py-1.5 rounded-lg text-xs bg-amber-500/25 text-amber-300 border border-amber-500/40 transition flex items-center gap-1';
+                eraserBtn.className = 'touch-target-min px-3 py-2 rounded-xl text-xs bg-amber-500/25 text-amber-300 border border-amber-500/40 transition flex items-center gap-1';
             } else {
-                eraserBtn.className = 'px-2.5 py-1.5 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1';
+                eraserBtn.className = 'touch-target-min px-3 py-2 rounded-xl text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1';
             }
         }
 
@@ -1433,7 +1561,7 @@
         }
 
         // ==========================================
-        // 5. Gemini API 呼叫與安全 JSON 解析
+        // 5. Gemini API 呼叫與本地無縫備援
         // ==========================================
         function extractJsonObject(raw) {
             if (!raw || typeof raw !== 'string') throw new Error('Empty response');
@@ -1446,9 +1574,12 @@
             return JSON.parse(cleaned);
         }
 
-        async function callGeminiAPI(payload, timeoutMs = 15000) {
+        async function callGeminiAPI(payload, timeoutMs = 12000) {
+            if (!apiKey || !apiKey.trim()) {
+                throw new Error('NO_API_KEY');
+            }
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
-            const delays = [1000, 2000];
+            const delays = [800, 1600];
 
             for (let attempt = 0; attempt <= delays.length; attempt++) {
                 const controller = new AbortController();
@@ -1471,7 +1602,7 @@
             }
         }
 
-        // AI 智慧出題按鈕
+        // AI 出題按鈕（無 API Key 或網路逾時時無縫改由本地題庫出題）
         async function generateAIQuestion() {
             const btn = document.getElementById('btn-ai-question');
             if (!btn) return;
@@ -1480,7 +1611,7 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>出題中...</span>';
 
             const targetUnit = resolveTargetUnit();
-            const prompt = `你是台灣翰林版 115 學年度國中二年級上學期（國二上）數學老師。請針對單元「${UNIT_NAMES[targetUnit]}」出一題符合段考水準的計算題或生活應用題。
+            const prompt = `你是台灣翰林版 115 學年度國中二年級上學期（第3冊）數學老師。請針對單元「${UNIT_NAMES[targetUnit]}」出一題符合段考水準的計算題或應用題。
 請只回傳純 JSON 物件，欄位包含：
 - "unit": "${targetUnit}"
 - "html": "題目內容（可使用 <sup>2</sup> 與 √、± 等符號，絕對不要使用 LaTeX $ 符號）"
@@ -1510,8 +1641,10 @@
                 });
                 showToast('已生成 AI 智慧新題目！');
             } catch (err) {
-                showToast('AI 連線逾時，已自動切換至本地題庫！');
-                generateLocalQuestion();
+                const localQ = createLocalQuestion(targetUnit);
+                localQ.source = '本地題庫（即時出題）';
+                renderQuestion(localQ);
+                showToast('已由本地題庫立即產生新題目！');
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = originalHtml;
@@ -1519,7 +1652,7 @@
         }
 
         // ==========================================
-        // 6. AI 出題小幫手多輪對話框
+        // 6. AI 出題小幫手多輪對話框（支援指定單元/難度與本地備援）
         // ==========================================
         function toggleAIChatPanel() {
             const panel = document.getElementById('ai-chat-panel');
@@ -1586,6 +1719,41 @@
             sendChatMessage();
         }
 
+        function detectRequestedUnitFromText(msg) {
+            for (const u of ALL_UNITS) {
+                if (msg.includes(u)) return u;
+            }
+            if (msg.includes('餘式') || msg.includes('除法')) return '1-2';
+            if (msg.includes('乘法公式') || msg.includes('平方差')) return '1-3';
+            if (msg.includes('多項式')) return '1-1';
+            if (msg.includes('方根') || msg.includes('平方根')) return '2-1';
+            if (msg.includes('根式') || msg.includes('有理化')) return '2-2';
+            if (msg.includes('畢氏') || msg.includes('直角三角形')) return '2-3';
+            if (msg.includes('十字交乘')) return '3-2';
+            if (msg.includes('因式分解')) return '3-1';
+            if (msg.includes('配方法') || msg.includes('公式解') || msg.includes('判別式')) return '4-2';
+            if (msg.includes('應用') || msg.includes('道路')) return '4-3';
+            if (msg.includes('方程式')) return '4-1';
+            return currentQuestion ? currentQuestion.unit : resolveTargetUnit();
+        }
+
+        function buildLocalChatFallback(userMsg) {
+            if (userMsg.includes('提示')) {
+                const hintText = currentQuestion
+                    ? `【${UNIT_NAMES[currentQuestion.unit]} 解題提示】\n${currentQuestion.explanation.split('\n')[0]}`
+                    : '先確認題目要求的是化簡、因式分解還是求未知數 x，再套用對應公式喔！';
+                return { reply: hintText, synced: false, question: null };
+            }
+            const targetUnit = detectRequestedUnitFromText(userMsg);
+            const q = createLocalQuestion(targetUnit);
+            q.source = '💬 對話自訂題（本地出題）';
+            return {
+                reply: `已為你準備了「${UNIT_NAMES[targetUnit]}」的練習題，並同步到上方作答區！`,
+                synced: true,
+                question: q
+            };
+        }
+
         async function sendChatMessage() {
             const input = document.getElementById('chat-input');
             const btn = document.getElementById('btn-send-chat');
@@ -1614,7 +1782,7 @@
                 ? `目前題目（${UNIT_NAMES[currentQuestion.unit]}）：${qPlainText}（標準答案：${currentQuestion.answer}）`
                 : '目前尚未載入題目';
 
-            const systemPrompt = `你是翰林版 115 學年度國二上數學全冊（單元 1-1～4-3）的 AI 出題小幫手。
+            const systemPrompt = `你是翰林版 115 學年度國二上數學全冊（第3冊 · 單元 1-1～4-3）的 AI 出題小幫手。
 ${currentContext}
 規則：
 1. 若學生要求出題、出類題、出簡單題或應用題，請設定 "hasNewQuestion": true，並提供 "unit"（必須為 1-1、1-2、1-3、2-1、2-2、2-3、3-1、3-2、4-1、4-2 或 4-3 之一）、"questionHtml"（可使用 <sup>2</sup> 與 √、± 等符號，絕不使用 LaTeX $ 符號）、"answer"、"explanation"。
@@ -1664,8 +1832,12 @@ ${currentContext}
                 }
             } catch (err) {
                 document.getElementById(loadingId)?.remove();
-                appendChatBubble('model', '目前 AI 連線稍微忙碌，我先從本地題庫為你換一題新的練習題，你也可以再試一次！', true);
-                generateLocalQuestion();
+                const fallback = buildLocalChatFallback(userMsg);
+                appendChatBubble('model', fallback.reply, fallback.synced);
+                if (fallback.synced && fallback.question) {
+                    renderQuestion(fallback.question);
+                    showToast('已同步自訂單元題目至作答區！');
+                }
             } finally {
                 input.disabled = false;
                 btn.disabled = false;
@@ -1674,8 +1846,59 @@ ${currentContext}
         }
 
         // ==========================================
-        // 7. AI 手寫筆跡與答案雙重批改
+        // 7. 對答案批改（支援 AI 影像+文字批改與本地對答詳解）
         // ==========================================
+        function normalizeMathAnswer(str) {
+            return String(str || '')
+                .replace(/\s+/g, '')
+                .replace(/×/g, '*')
+                .replace(/÷/g, '/')
+                .replace(/\^2/g, '²')
+                .toLowerCase();
+        }
+
+        function evaluateLocalAnswer(userAns, correctAns, hasHandwriting) {
+            const uNorm = normalizeMathAnswer(userAns);
+            const cNorm = normalizeMathAnswer(correctAns);
+
+            // 支援多組解或交換順序比對（例如 x=2 或 x=3 與 x=3 或 x=2，或 2, 3 與 3, 2）
+            const splitParts = (s) => s.split(/(?:或|,|，|;)/).map(p => p.trim()).filter(Boolean);
+            const uParts = splitParts(uNorm);
+            const cParts = splitParts(cNorm);
+
+            const exactMatch = uNorm !== '' && (
+                uNorm === cNorm ||
+                (uParts.length > 1 && uParts.length === cParts.length &&
+                    uParts.every(p => cParts.includes(p)) && cParts.every(p => uParts.includes(p)))
+            );
+
+            if (exactMatch) {
+                return {
+                    status: 'correct',
+                    statusTitle: '答對了！太棒了！',
+                    handwritingFeedback: hasHandwriting
+                        ? '你的最終答案正確！建議搭配下方步驟再核對一次計算紙上的正負號與括號展開。'
+                        : '你的最終答案正確！若能在計算紙寫出完整算式，段考會更穩健喔。'
+                };
+            }
+
+            if (uNorm !== '' && cParts.length > 1 && cParts.some(p => uNorm.includes(p))) {
+                return {
+                    status: 'partial',
+                    statusTitle: '找到其中一個解，再檢查另一部分！',
+                    handwritingFeedback: '你的作答包含部分正確解，請確認是否漏掉另一組解、負號或化簡步驟。'
+                };
+            }
+
+            return {
+                status: 'wrong',
+                statusTitle: uNorm === '' ? '已為你顯示標準答案與解析' : '再檢查一下喔！',
+                handwritingFeedback: hasHandwriting
+                    ? '請對照下方標準解題步驟，檢視你在計算紙上哪一步出現符號或運算差異。'
+                    : '建議先在上方計算紙寫出算式步驟，再對照下方詳解釐清觀念！'
+            };
+        }
+
         async function checkAnswerWithAI() {
             if (!currentQuestion) return;
 
@@ -1744,15 +1967,11 @@ ${userTextAns ? userTextAns : '（學生未在文字框輸入，請直接判讀�
                 const grading = extractJsonObject(rawText);
                 renderGradingResult(grading);
             } catch (err) {
-                const clean = (s) => String(s || '').replace(/\s+/g, '').replace(/×/g, '*').replace(/÷/g, '/').toLowerCase();
-                const isMatch = userTextAns !== '' && clean(userTextAns) === clean(currentQuestion.answer);
-
+                const localEval = evaluateLocalAnswer(userTextAns, currentQuestion.answer, Boolean(canvasBase64));
                 renderGradingResult({
-                    status: isMatch ? 'correct' : 'wrong',
-                    statusTitle: isMatch ? '答對了！' : '答案與標準解答不太一樣喔',
-                    handwritingFeedback: canvasBase64
-                        ? '目前為離線快速比對模式，請對照下方標準步驟檢視你在計算紙上的推導過程！'
-                        : '建議下次可以先在上方計算紙寫出步驟，能有效避免正負號、漏根或化簡粗心喔！',
+                    status: localEval.status,
+                    statusTitle: localEval.statusTitle,
+                    handwritingFeedback: localEval.handwritingFeedback,
                     correctAnswer: currentQuestion.answer,
                     stepByStepExplanation: currentQuestion.explanation
                 });
@@ -1780,25 +1999,25 @@ ${userTextAns ? userTextAns : '（學生未在文字框輸入，請直接判讀�
 
             if (status === 'correct') {
                 streakCount += 1;
-                if (banner) banner.className = 'flex items-center justify-between p-3.5 rounded-xl border bg-emerald-500/15 border-emerald-500/40 text-emerald-200';
+                if (banner) banner.className = 'flex items-center justify-between gap-2 p-3.5 rounded-xl border bg-emerald-500/15 border-emerald-500/40 text-emerald-200';
                 if (icon) {
-                    icon.className = 'w-10 h-10 rounded-full flex items-center justify-center text-xl bg-emerald-500 text-slate-950';
+                    icon.className = 'w-10 h-10 rounded-full flex items-center justify-center text-xl bg-emerald-500 text-slate-950 shrink-0';
                     icon.innerHTML = '<i class="fa-solid fa-check"></i>';
                 }
                 if (subtitle) subtitle.textContent = '觀念與計算過程都很完整，繼續保持！';
             } else if (status === 'partial') {
                 streakCount = 0;
-                if (banner) banner.className = 'flex items-center justify-between p-3.5 rounded-xl border bg-amber-500/15 border-amber-500/40 text-amber-200';
+                if (banner) banner.className = 'flex items-center justify-between gap-2 p-3.5 rounded-xl border bg-amber-500/15 border-amber-500/40 text-amber-200';
                 if (icon) {
-                    icon.className = 'w-10 h-10 rounded-full flex items-center justify-center text-xl bg-amber-500 text-slate-950';
+                    icon.className = 'w-10 h-10 rounded-full flex items-center justify-center text-xl bg-amber-500 text-slate-950 shrink-0';
                     icon.innerHTML = '<i class="fa-solid fa-exclamation"></i>';
                 }
                 if (subtitle) subtitle.textContent = '方向正確，但可能漏了一個根或尚未化為最簡形式喔！';
             } else {
                 streakCount = 0;
-                if (banner) banner.className = 'flex items-center justify-between p-3.5 rounded-xl border bg-rose-500/15 border-rose-500/40 text-rose-200';
+                if (banner) banner.className = 'flex items-center justify-between gap-2 p-3.5 rounded-xl border bg-rose-500/15 border-rose-500/40 text-rose-200';
                 if (icon) {
-                    icon.className = 'w-10 h-10 rounded-full flex items-center justify-center text-xl bg-rose-500 text-white';
+                    icon.className = 'w-10 h-10 rounded-full flex items-center justify-center text-xl bg-rose-500 text-white shrink-0';
                     icon.innerHTML = '<i class="fa-solid fa-xmark"></i>';
                 }
                 if (subtitle) subtitle.textContent = '看看下方的算式診斷與詳解，馬上就能搞懂！';
@@ -1806,9 +2025,9 @@ ${userTextAns ? userTextAns : '（學生未在文字框輸入，請直接判讀�
 
             if (streakEl) streakEl.textContent = String(streakCount);
             if (title) title.textContent = grading.statusTitle || (status === 'correct' ? '答對了！' : '再加油一下！');
-            if (hwFeedback) hwFeedback.textContent = grading.handwritingFeedback || '';
-            if (correctAnsEl) correctAnsEl.textContent = grading.correctAnswer || currentQuestion.answer;
-            if (explanationEl) explanationEl.textContent = grading.stepByStepExplanation || currentQuestion.explanation;
+            if (hwFeedback) hwFeedback.textContent = sanitizeMathText(grading.handwritingFeedback || '');
+            if (correctAnsEl) correctAnsEl.textContent = sanitizeMathText(grading.correctAnswer || currentQuestion.answer);
+            if (explanationEl) explanationEl.textContent = sanitizeMathText(grading.stepByStepExplanation || currentQuestion.explanation);
         }
 
         // ==========================================
@@ -1837,6 +2056,8 @@ ${userTextAns ? userTextAns : '（學生未在文字框輸入，請直接判讀�
         window.addEventListener('resize', resizeCanvas);
 
         function bootstrapApp() {
+            refreshChapterUI();
+            refreshUnitUI();
             resizeCanvas();
             generateLocalQuestion();
         }
